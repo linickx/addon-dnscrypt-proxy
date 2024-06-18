@@ -1,0 +1,1 @@
+# addon-dnscrypt-proxy
