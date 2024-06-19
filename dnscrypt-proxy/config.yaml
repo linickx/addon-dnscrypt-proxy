@@ -1,6 +1,6 @@
 name: "dnsCrypt Proxy"
-description: "My dnscrypt-proxy add-on!"
-version: "2024.06.19"
+description: "dnscrypt-proxy add-on for Home Assistant"
+version: "2024.06.19.1"
 slug: "dnscrypt-proxy"
 init: false
 arch:

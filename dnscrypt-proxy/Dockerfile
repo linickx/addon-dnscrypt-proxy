@@ -14,5 +14,9 @@ RUN sed -i "\|file = '/var/log/dnscrypt-proxy/query.log'|a file = '/dev/stdout'"
 RUN sed -i "s|log_files_max_size = 10|#log_files_max_size = 10|" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 RUN sed -i "\|log_files_max_size = 10|a log_files_max_size = 0" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 
+# RFC1918 reverse lookups blocked from upstream...
+COPY blocked-names.txt /etc/dnscrypt-proxy/blocked-names.txt
+RUN sed -i "s|# blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'|blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+
 ENTRYPOINT ["/usr/bin/dnscrypt-proxy"]
 CMD ["-config", "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"]
