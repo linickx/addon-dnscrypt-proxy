@@ -9,6 +9,7 @@ arch:
   - armhf
   - armv7
   - i386
+image: linickx/addon-dnscrypt-proxy-{arch}
 ports:
   53/tcp: 53
   53/udp: 53
