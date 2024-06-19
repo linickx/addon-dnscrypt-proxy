@@ -23,5 +23,5 @@ jobs:
           args: |
             --all \
             --target dnscrypt-proxy \
-            --docker-user ${{ secrets.DOCKERHUB_USERNAME }} \
+            --docker-user ${{ vars.DOCKERHUB_USERNAME }} \
             --docker-password ${{ secrets.DOCKERHUB_TOKEN }}
