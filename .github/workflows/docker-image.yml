@@ -42,4 +42,4 @@ jobs:
             --${{ matrix.architecture }} \
             --image  addon-dnscrypt-proxy-${{ matrix.architecture }} \
             --target /data/ \
-            --docker-hub linickx/addon-dnscrypt-proxy-${{ matrix.architecture }}
+            --docker-hub linickx
