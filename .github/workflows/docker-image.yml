@@ -40,5 +40,5 @@ jobs:
         with:
           args: |
             --${{ matrix.architecture }} \
-            --target /data/
+            --target dnscrypt-proxy \
             --docker-hub linickx/addon-dnscrypt-proxy-${{ matrix.architecture }}
