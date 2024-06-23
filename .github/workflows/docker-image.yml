@@ -42,4 +42,5 @@ jobs:
             --${{ matrix.architecture }} \
             --image  addon-dnscrypt-proxy-${{ matrix.architecture }} \
             --target /data/ \
-            --docker-hub linickx
+            --docker-hub linickx \
+            --cosign
