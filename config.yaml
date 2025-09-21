@@ -4,11 +4,14 @@ version: "2025.09.21"
 slug: "dnscrypt-proxy"
 init: false
 arch:
-  - aarch64
-  - amd64
-  - armhf
-  - armv7
-  - i386
+- aarch64
+- amd64
+- armhf
+- armv7
+- i386
 ports:
-  53/tcp: 53
-  53/udp: 53
+ 53/tcp: 53
+ 53/udp: 53
+```yaml
+
+```
