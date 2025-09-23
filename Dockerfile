@@ -18,5 +18,7 @@ RUN sed -i "\|log_files_max_size = 10|a log_files_max_size = 0" /etc/dnscrypt-pr
 COPY blocked-names.txt /etc/dnscrypt-proxy/blocked-names.txt
 RUN sed -i "s|# blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'|blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'|" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 
-ENTRYPOINT ["/usr/bin/dnscrypt-proxy"]
-CMD ["-config", "/etc/dnscrypt-proxy/dnscrypt-proxy.toml"]
+# copy in our entrypoint script
+COPY run.sh /
+RUN chmod a+x /run.sh
+CMD [ "/run.sh" ]
