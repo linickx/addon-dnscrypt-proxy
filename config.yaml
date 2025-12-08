@@ -10,4 +10,4 @@ ports:
   53/tcp: 53
   53/udp: 53
 slug: dnscrypt-proxy
-version: 2025.11.26
+version: 2025.12.08
