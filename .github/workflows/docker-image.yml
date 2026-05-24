@@ -1,4 +1,4 @@
-name: Imge
+name: Build HA App/Addon
 
 on:
   workflow_dispatch:
