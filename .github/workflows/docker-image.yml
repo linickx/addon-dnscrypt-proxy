@@ -59,32 +59,36 @@ jobs:
 
       - name: Create SBOM
         uses: anchore/sbom-action@v0
+        id: my-sbom
         with:
           image: ${{ matrix.image }}:latest
           format: spdx-json
           output-file: SBOM.${{ matrix.arch }}.spdx.json
 
-      - name: Sleep to avoid git clashes
-        run: |
-             if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
-             sleep 10
-             fi
-
-      - name: Upload SBOM to git
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-            git config --global user.name "${{ github.actor }}"
-            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-            git pull
-            git add "SBOM.${{ matrix.arch }}.spdx.json"
-            git commit -m "SBOM ${{ matrix.arch }} $(date +'%m-%d-%Y %T')"
-            git push
-
-      - name: SBOM upload to GitHub API
-        if: github.event_name == 'workflow_dispatch'
-        uses: advanced-security/spdx-dependency-submission-action@v0.2.0
-        with:
-          filePath: ./
+      #
+      # DISABLE as doesn't work with release workflow, and SBOM is available in the build workflow as an artifact
+      #
+      # - name: Sleep to avoid git clashes
+      #   run: |
+      #        if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
+      #        sleep 10
+      #        fi
+      #
+      # - name: Upload SBOM to git
+      #   if: github.event_name == 'workflow_dispatch'
+      #   run: |
+      #       git config --global user.name "${{ github.actor }}"
+      #       git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+      #       git pull
+      #       git add "SBOM.${{ matrix.arch }}.spdx.json"
+      #       git commit -m "SBOM ${{ matrix.arch }} $(date +'%m-%d-%Y %T')"
+      #       git push
+      #
+      # - name: SBOM upload to GitHub API
+      #   if: github.event_name == 'workflow_dispatch'
+      #   uses: advanced-security/spdx-dependency-submission-action@v0.2.0
+      #   with:
+      #     filePath: ./
 
   manifest:
     name: Publish multi-arch manifest
