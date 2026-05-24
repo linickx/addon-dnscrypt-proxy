@@ -53,16 +53,21 @@ jobs:
           image-tags: |
             ${{ github.event.release.tag_name }}
             latest
-          push: "true"
+          #push: "true"
           version: ${{ github.event.release.tag_name }}
           cosign-base-verify: false # Disabled, as it seem to (try & fail) verify itself before building itself :-/
 
       - name: Create SBOM
         uses: anchore/sbom-action@v0
+        id: my-sbom
         with:
           image: ${{ matrix.image }}:latest
           format: spdx-json
           output-file: SBOM.${{ matrix.arch }}.spdx.json
+
+      - name: Display all outputs as JSON
+        run: |
+             echo "${{ toJSON(steps.my-sbom.outputs) }}"
 
       - name: Sleep to avoid git clashes
         run: |
