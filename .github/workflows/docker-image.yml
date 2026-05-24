@@ -64,10 +64,17 @@ jobs:
           format: spdx-json
           output-file: SBOM.${{ matrix.arch }}.spdx.json
 
+      - name: Sleep to avoid git clashes
+        run: |
+             if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
+             sleep 10
+             fi
+
       - name: Upload SBOM to git
         run: |
             git config --global user.name "${{ github.actor }}"
             git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git pull
             git add "SBOM.${{ matrix.arch }}.spdx.json"
             git commit -m "SBOM ${{ matrix.arch }} $(date +'%m-%d-%Y %T')"
             git push
