@@ -34,7 +34,7 @@ jobs:
     needs: init
     runs-on: ${{ matrix.os }}
     permissions:
-      contents: read # To check out the code
+      contents: write
       id-token: write # Write needed for Cosign signing (issue OIDC token for signing)
     strategy:
       fail-fast: false
@@ -56,6 +56,33 @@ jobs:
           push: "true"
           version: ${{ github.event.release.tag_name }}
           cosign-base-verify: false # Disabled, as it seem to (try & fail) verify itself before building itself :-/
+
+      - name: Create SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ matrix.image }}:latest
+          format: spdx-json
+          output-file: SBOM.${{ matrix.arch }}.spdx.json
+
+      - name: Sleep to avoid git clashes
+        run: |
+             if [[ "${{ matrix.arch }}" == "aarch64" ]]; then
+             sleep 10
+             fi
+
+      - name: Upload SBOM to git
+        run: |
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git pull
+            git add "SBOM.${{ matrix.arch }}.spdx.json"
+            git commit -m "SBOM ${{ matrix.arch }} $(date +'%m-%d-%Y %T')"
+            git push
+
+      - name: SBOM upload to GitHub API
+        uses: advanced-security/spdx-dependency-submission-action@v0.2.0
+        with:
+          filePath: ./
 
   manifest:
     name: Publish multi-arch manifest
