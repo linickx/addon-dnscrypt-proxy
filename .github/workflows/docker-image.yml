@@ -17,16 +17,17 @@ jobs:
     name: Initialize build
     runs-on: ubuntu-latest
     outputs:
-      architectures: ${{ steps.info.outputs.architectures }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@v6
 
       - name: Get build matrix
         id: matrix
-        uses: home-assistant/builder/actions/prepare-multi-arch-matrix@[version]
+        uses: home-assistant/builder/actions/prepare-multi-arch-matrix@master
         with:
           architectures: ${{ env.ARCHITECTURES }}
           image-name: ${{ env.IMAGE_NAME }}
+          registry-prefix: docker.io/${{ vars.DOCKERHUB_USERNAME }}
 
   build:
     name: Build ${{ matrix.arch }} image
@@ -42,7 +43,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Build image
-        uses: home-assistant/builder/actions/build-image@[version]
+        uses: home-assistant/builder/actions/build-image@master
         with:
           arch: ${{ matrix.arch }}
           container-registry: docker.io
@@ -54,6 +55,7 @@ jobs:
             latest
           push: "true"
           version: ${{ github.event.release.tag_name }}
+          cosign-base-verify: false # Disabled, as it seem to (try & fail) verify itself before building itself :-/
 
   manifest:
     name: Publish multi-arch manifest
@@ -63,10 +65,11 @@ jobs:
       id-token: write # Write needed for Cosign signing (issue OIDC token for signing)
     steps:
       - name: Publish multi-arch manifest
-        uses: home-assistant/builder/actions/publish-multi-arch-manifest@[version]
+        uses: home-assistant/builder/actions/publish-multi-arch-manifest@master
         with:
           architectures: ${{ env.ARCHITECTURES }}
           container-registry: docker.io
+          registry-prefix: docker.io/${{ vars.DOCKERHUB_USERNAME }}
           container-registry-username: ${{ vars.DOCKERHUB_USERNAME }}
           container-registry-password: ${{ secrets.DOCKERHUB_TOKEN }}
           image-name: ${{ env.IMAGE_NAME }}
