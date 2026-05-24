@@ -6,7 +6,7 @@ on:
     types: [published]
 
 env:
-  ARCHITECTURES: ["amd64", "aarch64"]
+  ARCHITECTURES: '["amd64", "aarch64"]'
   IMAGE_NAME: addon-dnscrypt-proxy
 
 permissions:
@@ -27,6 +27,7 @@ jobs:
         with:
           architectures: ${{ env.ARCHITECTURES }}
           image-name: ${{ env.IMAGE_NAME }}
+          registry-prefix: docker.io/${{ vars.DOCKERHUB_USERNAME }}
 
   build:
     name: Build ${{ matrix.arch }} image
