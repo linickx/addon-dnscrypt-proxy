@@ -57,6 +57,18 @@ jobs:
           version: ${{ github.event.release.tag_name }}
           cosign-base-verify: false # Disabled, as it seem to (try & fail) verify itself before building itself :-/
 
+      - name: Create SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: docker.io/${{ vars.DOCKERHUB_USERNAME }}/${{ matrix.arch }}-${{ matrix.image }}:latest
+          format: spdx-json
+          output-file: SBOM.${{ matrix.arch }}.spdx.json
+
+      - name: SBOM upload to GitHub API
+        uses: advanced-security/spdx-dependency-submission-action@v0.2.0
+        with:
+          filePath: ./
+
   manifest:
     name: Publish multi-arch manifest
     needs: [init, build]
