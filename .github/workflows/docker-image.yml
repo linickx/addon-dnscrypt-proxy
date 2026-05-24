@@ -64,6 +64,14 @@ jobs:
           format: spdx-json
           output-file: SBOM.${{ matrix.arch }}.spdx.json
 
+      - name: Upload SBOM & SCAN to git
+        run: |
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git add "SBOM.${{ matrix.arch }}.spdx.json"
+            git commit -m "SBOM ${{ matrix.arch }} $(date +'%m-%d-%Y %T')"
+            git push
+
       - name: SBOM upload to GitHub API
         uses: advanced-security/spdx-dependency-submission-action@v0.2.0
         with:
