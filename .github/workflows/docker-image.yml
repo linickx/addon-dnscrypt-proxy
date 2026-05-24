@@ -6,7 +6,7 @@ on:
     types: [published]
 
 env:
-  ARCHITECTURES: '["amd64", "aarch64"]'
+  ARCHITECTURES: ["amd64", "aarch64"]
   IMAGE_NAME: addon-dnscrypt-proxy
 
 permissions:
