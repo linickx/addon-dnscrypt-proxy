@@ -1,5 +1,12 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
+# https://github.com/home-assistant/docker-base
+FROM ghcr.io/home-assistant/base:latest
+
+LABEL \
+    org.opencontainers.image.title="dnsCrypt Proxy app for Home Assistant" \
+    org.opencontainers.image.description="A flexible DNS proxy, with support for modern encrypted DNS all packaged up ready to run inside Home Assistant" \
+    org.opencontainers.image.source="https://github.com/linickx/addon-dnscrypt-proxy" \
+    org.opencontainers.image.licenses="ISC License"
 
 # Install
 RUN apk update \
