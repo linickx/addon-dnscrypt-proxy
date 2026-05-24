@@ -34,7 +34,7 @@ jobs:
     needs: init
     runs-on: ${{ matrix.os }}
     permissions:
-      contents: read # To check out the code
+      contents: write
       id-token: write # Write needed for Cosign signing (issue OIDC token for signing)
     strategy:
       fail-fast: false
@@ -64,7 +64,7 @@ jobs:
           format: spdx-json
           output-file: SBOM.${{ matrix.arch }}.spdx.json
 
-      - name: Upload SBOM & SCAN to git
+      - name: Upload SBOM to git
         run: |
             git config --global user.name "${{ github.actor }}"
             git config --global user.email "${{ github.actor }}@users.noreply.github.com"
